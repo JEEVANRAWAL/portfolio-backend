@@ -7,5 +7,9 @@ Route::get('/', function () {
 });
 
 Route::get('aside', function (){
-    return view('admin.layout.mainLayout');
+    return view('admin.layouts.mainLayout');
+});
+
+Route::get('menu', function(){
+    return view('admin.pages.menus.menu');
 });

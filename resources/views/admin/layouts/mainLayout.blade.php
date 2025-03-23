@@ -17,8 +17,15 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
 </head>
 <body>
-    @include('admin.layout.sidebar')
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        @include('admin.layouts.sidebar')
     
+        <!-- Content -->
+        <div class="flex-1 bg-[#f4f6f2] pl-2 transition-all duration-700">
+            @yield('content')
+        </div>
+    </div>
     <script src="{{ asset('js/adminjs.js')}}"></script>
 </body>
 </html>

@@ -15,6 +15,26 @@
      <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+        .sortable-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        .sortable-item {
+          padding: 10px;
+          margin: 5px 0;
+          background-color: #f0f0f0;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          cursor: grab;
+        }
+        .sortable-item:active {
+          cursor: grabbing;
+        }
+      </style>
 </head>
 <body>
     <div class="flex min-h-screen">
@@ -22,7 +42,7 @@
         @include('admin.layouts.sidebar')
     
         <!-- Content -->
-        <div class="flex-1 bg-[#f4f6f2] pl-2 transition-all duration-700">
+        <div class="flex-1 bg-[#f4f6f2] pl-6 py-10 transition-all duration-700">
             @yield('content')
         </div>
     </div>

@@ -42,7 +42,10 @@
   </div>
     
 </div>
+@endsection
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.22.0/dist/sweetalert2.all.min.js"></script>
+
       <script>
         // Initialize SortableJS
         const sortable = new Sortable(document.getElementById('sortableList'), {
@@ -71,8 +74,21 @@
 
           $('.sortable-item').on('click', function(){
             console.log('hello item clicked');
-          });
+            Swal.fire({
+            title: 'Do you want to continue?',
+            text: 'This will take you to the next step.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Great!', 'Let’s move forward.', 'success');
+            } else {
+                Swal.fire('No worries!', 'Take your time.', 'info');
+            }
+          });           
+
         });
+      });
       </script>
 @endpush
-@endsection

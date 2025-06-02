@@ -2,23 +2,24 @@
 
 @section('content')
 <div class="menu-page-wrapper w-full flex justify-between">
-  <div class="w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
-      <div class="mb-5">
-        <span class="font-bold">Main Menu</span>
-      </div>
-      <ul id="sortableList" class="sortable-list">
-        <li class="sortable-item">Item 1</li>
-        <li class="sortable-item">Item 2</li>
-        <li class="sortable-item">Item 3</li>
-        <li class="sortable-item">Item 4</li>
-      </ul>
-  </div>
+  @if($menus)
+    <div class="w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+        <div class="mb-5">
+          <span class="font-bold">Main Menu</span>
+        </div>
+        <ul id="sortableList" class="sortable-list">
+          @foreach ($menus as $menu)
+          <li class="sortable-item">{{$menu->menu_name}}</li>
+          @endforeach
+        </ul>
+    </div>
+  @endif
 
   <div class="w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
     <div class="mb-5">
       <span class="font-bold">Sub Menu</span>
     </div>
-    <ul id="sortableList" class="sortable-list">
+    <ul id="sortableList2" class="sortable-list">
       <li class="sortable-item">Item 1</li>
       <li class="sortable-item">Item 2</li>
       <li class="sortable-item">Item 3</li>
@@ -41,6 +42,7 @@
   </div>
     
 </div>
+@push('script')
       <script>
         // Initialize SortableJS
         const sortable = new Sortable(document.getElementById('sortableList'), {
@@ -56,5 +58,21 @@
             console.log('Updated positions:', positions);
           }
         });
+
+
+
+        $(document).ready(function(){
+
+          $('.sortable-item').hover( 
+            function(){
+              $(this).css('cursor', 'pointer');
+            }
+          );
+
+          $('.sortable-item').on('click', function(){
+            console.log('hello item clicked');
+          });
+        });
       </script>
+@endpush
 @endsection

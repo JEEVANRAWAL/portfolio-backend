@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{-- <meta name="csrf-token" content="{{csrf_token()}}"> --}}
     <title>Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"> --}}
@@ -17,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <style>
         .sortable-list {
           list-style: none;
@@ -47,5 +49,6 @@
         </div>
     </div>
     <script src="{{ asset('js/adminjs.js')}}"></script>
+    @stack('script')
 </body>
 </html>

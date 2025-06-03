@@ -60,6 +60,11 @@ nav {
     transition: all ease-in 500ms;
 }
 
+.sortable-list .active {
+    background-color: #fccccc;
+    box-shadow: 3px 3px 5px 0 #fccccc;
+}
+
 nav li {
     font-size: 18px;
     font-family: "Public Sans";

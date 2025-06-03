@@ -1,31 +1,19 @@
 @extends('admin.layouts.mainLayout')
 
 @section('content')
-<div class="menu-page-wrapper w-full flex justify-between">
+<div class="menu-page-wrapper w-full flex">
   @if($menus)
-    <div class="w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+    <div class="mainMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
         <div class="mb-5">
           <span class="font-bold">Main Menu</span>
         </div>
         <ul id="sortableList" class="sortable-list">
           @foreach ($menus as $menu)
-          <li class="sortable-item">{{$menu->menu_name}}</li>
+          <li class="sortable-item" data-itemId="{{$menu->id}}">{{$menu->menu_name}}</li>
           @endforeach
         </ul>
     </div>
   @endif
-
-  <div class="w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
-    <div class="mb-5">
-      <span class="font-bold">Sub Menu</span>
-    </div>
-    <ul id="sortableList2" class="sortable-list">
-      <li class="sortable-item">Item 1</li>
-      <li class="sortable-item">Item 2</li>
-      <li class="sortable-item">Item 3</li>
-      <li class="sortable-item">Item 4</li>
-    </ul>
-  </div>
 
   <div class="w-[30%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
     <form action="" method="post">
@@ -47,6 +35,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.22.0/dist/sweetalert2.all.min.js"></script>
 
       <script>
+        var getMenuItems = "{{route('admin.showMenuITems', '__placeholder__')}}"
+
         // Initialize SortableJS
         const sortable = new Sortable(document.getElementById('sortableList'), {
           animation: 500, // Animation duration in ms
@@ -73,22 +63,52 @@
           );
 
           $('.sortable-item').on('click', function(){
-            console.log('hello item clicked');
-            Swal.fire({
-            title: 'Do you want to continue?',
-            text: 'This will take you to the next step.',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-          }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Great!', 'Let’s move forward.', 'success');
-            } else {
-                Swal.fire('No worries!', 'Take your time.', 'info');
-            }
+            $('.sortable-item').removeClass('active');
+            $(this).addClass('active');
+            let itemId = $(this).data('itemid');
+            let data = {
+                        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    };
+
+                $.ajax({
+                  url: getMenuItems.replace('__placeholder__', itemId),          
+                  method: 'GET',                 
+                  data: data,      
+                  dataType: 'json',              
+                  success: function(response) {  
+                    var HtmlHead = `<div class="subMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+                                      <div class="mb-5">
+                                        <span class="font-bold">Sub Menu</span>
+                                      </div>
+                                      <ul id="sortableList2" class="sortable-list subMenu-sortable-list">
+                                        `;
+                    var htmlfoot = `</ul>
+                                    </div>`;
+                    var ulList = ``;
+
+                    response.data.forEach(element => {
+                      ulList = ulList+`<li class="sortable-item submenu-sortable-item">${element.title}</li>`
+                    });
+
+                    var finalHtml = HtmlHead+ulList+htmlfoot;
+
+                    var submenu = $('.subMenuList');
+                    if(submenu.length == 0){
+                      $('.mainMenuList').after(finalHtml);
+                    } else{ 
+                      $('.subMenu-sortable-list').html(ulList);
+                    }
+                  },
+                  error: function(xhr, status, error) {  
+                    console.log(xhr.responseJSON.message);
+                    Swal.fire(xhr.responseJSON.message);
+                  }
+                });
           });           
 
-        });
+          $(document).on('mouseenter', '.submenu-sortable-item', function() {
+            $(this).css('cursor', 'pointer');
+          })
       });
       </script>
 @endpush

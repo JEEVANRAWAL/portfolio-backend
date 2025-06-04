@@ -15,7 +15,7 @@
     </div>
   @endif
 
-  <div class="w-[30%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+  {{-- <div class="w-[30%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
     <form action="" method="post">
       <label for="ItemName">Item Name</label>
       <input type="text" name="itemName" id="ItemName">
@@ -27,7 +27,7 @@
         <option value="demo4">demo4</option>
       </select>
     </form>
-  </div>
+  </div> --}}
     
 </div>
 @endsection
@@ -49,6 +49,7 @@
             }));
             
             $(function(){
+              $(document).find('.spinner-block').removeClass('hidden');
               $.ajaxSetup({
                 headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -63,14 +64,15 @@
                   positions: positions
                 },
                 success: function(response) {
-                  console.log(response);
+                  $(document).find('.spinner-block').addClass('hidden');
+                  toastr.success(response.message);
                 },
                 error: function(xhr, status, error) {
-                  console.error(error);
+                  $(document).find('.spinner-block').addClass('hidden');
+                  toastr.error(error);
                 }
               });
             });
-            console.log('Updated positions:', positions);
           }
         });
 
@@ -104,6 +106,8 @@
           );
 
           $(document).on('click', '.sortable-item', function(){
+            $(document).find('.spinner-block').removeClass('hidden');
+
             var grandparent = $(this).parent().parent();
             var grandparentId = grandparent.attr('id');
             var nextblockId = generateNextMenuBlockId(grandparentId);
@@ -137,6 +141,8 @@
                 var finalHtml = HtmlHead+ulList+htmlfoot;
 
                 var submenu = $('#'+nextblockId);
+                $(document).find('.spinner-block').addClass('hidden');
+
                 if(submenu.length == 0){
                   $('#'+grandparentId).after(finalHtml);
                   
@@ -150,6 +156,7 @@
                         name: item.textContent.trim(),
                         position: index + 1
                       }));
+                      $(document).find('.spinner-block').removeClass('hidden');
                       
                       $.ajaxSetup({
                         headers: {
@@ -165,13 +172,14 @@
                           positions: positions
                         },
                         success: function(response) {
-                          console.log(response);
+                          $(document).find('.spinner-block').addClass('hidden');
+                          toastr.success(response.message);
                         },
                         error: function(xhr, status, error) {
-                          console.error(error);
+                          $(document).find('.spinner-block').addClass('hidden');
+                          toastr.error(error);
                         }
                       });
-                      console.log(`Updated positions for ${nextblockId}:`, positions);
                     }
                   });
                 } else{ 
@@ -191,8 +199,17 @@
                 }
               },
               error: function(xhr, status, error) {  
-                console.log(xhr.responseJSON.message);
-                Swal.fire(xhr.responseJSON.message);
+                $(document).find('.spinner-block').addClass('hidden');
+                Swal.fire({
+                  title: 'Data not found',
+                  text: xhr.responseJSON.message,
+                  icon: 'info',
+                  customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                  },
+                });
+
               }
             });
           });

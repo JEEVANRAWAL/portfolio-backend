@@ -16,9 +16,15 @@
      <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/spinner.css')}}">
+
+    {{-- CDN lists--}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <style>
         .sortable-list {
           list-style: none;
@@ -37,9 +43,17 @@
           cursor: grabbing;
         }
       </style>
+      @stack('style')
 </head>
 <body>
     <div class="flex min-h-screen">
+      <div class="spinner-block absolute top-0 left-0 w-full h-full flex items-center justify-center z-50 hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-white opacity-35"></div> <!-- Background with opacity -->
+        <div class="relative z-10">
+          @include('spinner') <!-- Spinner remains unaffected -->
+        </div>
+      </div>
+
         <!-- Sidebar -->
         @include('admin.layouts.sidebar')
     

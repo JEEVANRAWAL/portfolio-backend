@@ -1,9 +1,9 @@
 @extends('admin.layouts.mainLayout')
 
 @section('content')
-<div class="menu-page-wrapper w-full flex">
+<div class="menu-page-wrapper w-full grid grid-cols-4 gap-5">
   @if($menus)
-    <div id="menuBlock-1" class="mainMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+    <div id="menuBlock-1" class="mainMenuList w-[100%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
         <div class="mb-5">
           <span class="font-bold">Main Menu</span>
         </div>
@@ -99,9 +99,9 @@
               data: data,
               dataType: 'json',        
               success: function(response) {  
-                var HtmlHead = `<div id="${nextblockId}" class="subMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+                var HtmlHead = `<div id="${nextblockId}" class="subMenuList w-[100%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
                                   <div class="mb-5">
-                                    <span class="font-bold">Sub Menu</span>
+                                    <span class="font-bold">Sub Menu ${grandparentId.split('-')[1]}</span>
                                   </div>
                                   <ul id="sortableList2" class="sortable-list ${nextblockId}-sortable-list">`;
                 var htmlfoot = `</ul>

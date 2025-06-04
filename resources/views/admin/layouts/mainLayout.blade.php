@@ -44,7 +44,7 @@
         @include('admin.layouts.sidebar')
     
         <!-- Content -->
-        <div class="flex-1 bg-[#f4f6f2] pl-6 py-10 transition-all duration-700">
+        <div class="flex-1 bg-[#f4f6f2] px-6 py-10 transition-all duration-700">
             @yield('content')
         </div>
     </div>

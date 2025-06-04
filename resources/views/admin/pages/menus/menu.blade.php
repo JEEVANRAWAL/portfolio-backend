@@ -3,7 +3,7 @@
 @section('content')
 <div class="menu-page-wrapper w-full flex">
   @if($menus)
-    <div class="mainMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+    <div id="menuBlock-1" class="mainMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
         <div class="mb-5">
           <span class="font-bold">Main Menu</span>
         </div>
@@ -39,8 +39,8 @@
 
         // Initialize SortableJS
         const sortable = new Sortable(document.getElementById('sortableList'), {
-          animation: 500, // Animation duration in ms
-          ghostClass: 'sortable-ghost', // Class added to the dragged item
+          animation: 500, 
+          ghostClass: 'sortable-ghost', 
           onEnd: function (evt) {
             const items = document.querySelectorAll('.sortable-item');
             const positions = Array.from(items).map((item, index) => ({
@@ -52,63 +52,93 @@
           }
         });
 
-
-
+        //Jquery code section
         $(document).ready(function(){
 
-          $('.sortable-item').hover( 
+          function generateNextMenuBlockId(grandparentId) {
+            var numericPart = parseInt(grandparentId.split('-')[1], 10);
+            if (!isNaN(numericPart)) {
+                var nextblockId = `menuBlock-${numericPart + 1}`;
+                return nextblockId;
+            } else {
+              try {
+                throw new Error('Invalid parent element ID format. Expected "menuBlock-{number}"');
+              } catch (error) {
+                return swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: error.message,
+                })
+              }
+            }
+          }
+
+          $(document).on(
+            'mouseenter',
+            '.sortable-item', 
             function(){
               $(this).css('cursor', 'pointer');
             }
           );
 
-          $('.sortable-item').on('click', function(){
-            $('.sortable-item').removeClass('active');
+          $(document).on('click', '.sortable-item', function(){
+            var grandparent = $(this).parent().parent();
+            var grandparentId = grandparent.attr('id');
+            var nextblockId = generateNextMenuBlockId(grandparentId);
+            $('#'+grandparentId).find('.sortable-item').removeClass('active');
             $(this).addClass('active');
             let itemId = $(this).data('itemid');
             let data = {
                         _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    };
+                        type: grandparentId == 'menuBlock-1' ? 'menuItems' : 'subMenuItems'
+                        };
 
-                $.ajax({
-                  url: getMenuItems.replace('__placeholder__', itemId),          
-                  method: 'GET',                 
-                  data: data,      
-                  dataType: 'json',              
-                  success: function(response) {  
-                    var HtmlHead = `<div class="subMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
-                                      <div class="mb-5">
-                                        <span class="font-bold">Sub Menu</span>
-                                      </div>
-                                      <ul id="sortableList2" class="sortable-list subMenu-sortable-list">
-                                        `;
-                    var htmlfoot = `</ul>
-                                    </div>`;
-                    var ulList = ``;
+            $.ajax({
+              url: getMenuItems.replace('__placeholder__', itemId),    
+              method: 'GET',     
+              data: data,
+              dataType: 'json',        
+              success: function(response) {  
+                var HtmlHead = `<div id="${nextblockId}" class="subMenuList w-[35%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
+                                  <div class="mb-5">
+                                    <span class="font-bold">Sub Menu</span>
+                                  </div>
+                                  <ul id="sortableList2" class="sortable-list ${nextblockId}-sortable-list">`;
+                var htmlfoot = `</ul>
+                                </div>`;
+                var ulList = ``;
 
-                    response.data.forEach(element => {
-                      ulList = ulList+`<li class="sortable-item submenu-sortable-item">${element.title}</li>`
-                    });
-
-                    var finalHtml = HtmlHead+ulList+htmlfoot;
-
-                    var submenu = $('.subMenuList');
-                    if(submenu.length == 0){
-                      $('.mainMenuList').after(finalHtml);
-                    } else{ 
-                      $('.subMenu-sortable-list').html(ulList);
-                    }
-                  },
-                  error: function(xhr, status, error) {  
-                    console.log(xhr.responseJSON.message);
-                    Swal.fire(xhr.responseJSON.message);
-                  }
+                response.data.forEach(element => {
+                  ulList = ulList+`<li class="sortable-item submenu-sortable-item" data-itemId="${element.id}">${element.title}</li>`
                 });
-          });           
 
-          $(document).on('mouseenter', '.submenu-sortable-item', function() {
-            $(this).css('cursor', 'pointer');
-          })
+                var finalHtml = HtmlHead+ulList+htmlfoot;
+
+                var submenu = $('#'+nextblockId);
+                if(submenu.length == 0){
+                  $('#'+grandparentId).after(finalHtml);
+                } else{ 
+                  $('.'+nextblockId+'-sortable-list').html(ulList);
+                  // Remove nested submenus
+                  var grandparentIdExtractedLastValue = parseInt(grandparentId.split('-')[1], 10);
+                  grandparentIdExtractedLastValue++;
+                  var nextSubmenu;
+                  do {
+                    grandparentIdExtractedLastValue++;
+                    console.log(grandparentIdExtractedLastValue);
+                      nextSubmenu = $('#menuBlock-' + grandparentIdExtractedLastValue);
+                      if (nextSubmenu.length > 0) {
+                          nextSubmenu.remove();
+                      }
+                  } while (nextSubmenu.length > 0);
+                }
+              },
+              error: function(xhr, status, error) {  
+                console.log(xhr.responseJSON.message);
+                Swal.fire(xhr.responseJSON.message);
+              }
+            });
+          });           
       });
       </script>
 @endpush

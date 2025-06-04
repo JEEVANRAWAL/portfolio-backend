@@ -7,7 +7,7 @@
         <div class="mb-5">
           <span class="font-bold">Main Menu</span>
         </div>
-        <ul id="sortableList" class="sortable-list">
+        <ul id="sortableList" class="sortable-list mainMenu-sortable-list">
           @foreach ($menus as $menu)
           <li class="sortable-item" data-itemId="{{$menu->id}}">{{$menu->menu_name}}</li>
           @endforeach
@@ -42,7 +42,7 @@
           animation: 500, 
           ghostClass: 'sortable-ghost', 
           onEnd: function (evt) {
-            const items = document.querySelectorAll('.sortable-item');
+            const items = document.querySelectorAll('.mainMenu-sortable-list .sortable-item');
             const positions = Array.from(items).map((item, index) => ({
               name: item.textContent.trim(),
               position: index + 1
@@ -117,15 +117,40 @@
                 var submenu = $('#'+nextblockId);
                 if(submenu.length == 0){
                   $('#'+grandparentId).after(finalHtml);
+                  // Initialize Sortable for the new submenu block
+                  new Sortable(document.querySelector(`.${nextblockId}-sortable-list`), {
+                    animation: 500,
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                      const items = document.querySelectorAll(`.${nextblockId}-sortable-list .sortable-item`);
+                      const positions = Array.from(items).map((item, index) => ({
+                        name: item.textContent.trim(),
+                        position: index + 1
+                      }));
+                      console.log(`Updated positions for ${nextblockId}:`, positions);
+                    }
+                  });
                 } else{ 
                   $('.'+nextblockId+'-sortable-list').html(ulList);
+                  // Re-initialize Sortable for the existing submenu block
+                  new Sortable(document.querySelector(`.${nextblockId}-sortable-list`), {
+                    animation: 500,
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                      const items = document.querySelectorAll(`.${nextblockId}-sortable-list .sortable-item`);
+                      const positions = Array.from(items).map((item, index) => ({
+                        name: item.textContent.trim(),
+                        position: index + 1
+                      }));
+                      console.log(`Updated positions for ${nextblockId}:`, positions);
+                    }
+                  });
                   // Remove nested submenus
                   var grandparentIdExtractedLastValue = parseInt(grandparentId.split('-')[1], 10);
                   grandparentIdExtractedLastValue++;
                   var nextSubmenu;
                   do {
                     grandparentIdExtractedLastValue++;
-                    console.log(grandparentIdExtractedLastValue);
                       nextSubmenu = $('#menuBlock-' + grandparentIdExtractedLastValue);
                       if (nextSubmenu.length > 0) {
                           nextSubmenu.remove();

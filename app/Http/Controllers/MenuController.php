@@ -16,4 +16,13 @@ class MenuController extends Controller
         
         return response()->view('admin.pages.menus.menu', compact('menus'), 200);
     }
+
+    public function updateOrder(Request $request){
+        foreach($request->positions as $position){
+            $menu = Menu::where('menu_name', $position['name'])->first();
+            $menu->order_index = $position['position'];
+            $menu->save();
+        }
+        return response()->json(['message'=> 'menu order updated sucessfully'], 200);
+    }
 }

@@ -28,4 +28,13 @@ class MenuItemController extends Controller
 
         return redirect()->back()->with(['message'=>'Requires ajax call to get data. Supports ajax call only.']);
     }
+
+    public function updateOrder(Request $request){
+        foreach($request->positions as $position){
+            $menuItem = MenuItem::where('title', $position['name'])->first();
+            $menuItem->order_index = $position['position'];
+            $menuItem->save();
+        }
+        return response()->json(['message'=> 'menu order updated sucessfully'], 200);
+    }
 }

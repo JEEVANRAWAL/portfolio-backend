@@ -47,7 +47,29 @@
               name: item.textContent.trim(),
               position: index + 1
             }));
+            
+            $(function(){
+              $.ajaxSetup({
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+              });
 
+              $.ajax({
+                url: "{{route('admin.updateMainMenuOrder')}}",
+                method: 'POST',
+                data: {
+                  _token: "{{csrf_token()}}",
+                  positions: positions
+                },
+                success: function(response) {
+                  console.log(response);
+                },
+                error: function(xhr, status, error) {
+                  console.error(error);
+                }
+              });
+            });
             console.log('Updated positions:', positions);
           }
         });
@@ -89,7 +111,7 @@
             $(this).addClass('active');
             let itemId = $(this).data('itemid');
             let data = {
-                        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        _token: "{{csrf_token()}}",
                         type: grandparentId == 'menuBlock-1' ? 'menuItems' : 'subMenuItems'
                         };
 
@@ -117,6 +139,7 @@
                 var submenu = $('#'+nextblockId);
                 if(submenu.length == 0){
                   $('#'+grandparentId).after(finalHtml);
+                  
                   // Initialize Sortable for the new submenu block
                   new Sortable(document.querySelector(`.${nextblockId}-sortable-list`), {
                     animation: 500,
@@ -127,24 +150,33 @@
                         name: item.textContent.trim(),
                         position: index + 1
                       }));
+                      
+                      $.ajaxSetup({
+                        headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                      });
+
+                      $.ajax({
+                        url: "{{route('admin.updateMenuItemOrder')}}",
+                        method: 'POST',
+                        data: {
+                          _token: "{{csrf_token()}}",
+                          positions: positions
+                        },
+                        success: function(response) {
+                          console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                          console.error(error);
+                        }
+                      });
                       console.log(`Updated positions for ${nextblockId}:`, positions);
                     }
                   });
                 } else{ 
                   $('.'+nextblockId+'-sortable-list').html(ulList);
-                  // Re-initialize Sortable for the existing submenu block
-                  new Sortable(document.querySelector(`.${nextblockId}-sortable-list`), {
-                    animation: 500,
-                    ghostClass: 'sortable-ghost',
-                    onEnd: function (evt) {
-                      const items = document.querySelectorAll(`.${nextblockId}-sortable-list .sortable-item`);
-                      const positions = Array.from(items).map((item, index) => ({
-                        name: item.textContent.trim(),
-                        position: index + 1
-                      }));
-                      console.log(`Updated positions for ${nextblockId}:`, positions);
-                    }
-                  });
+
                   // Remove nested submenus
                   var grandparentIdExtractedLastValue = parseInt(grandparentId.split('-')[1], 10);
                   grandparentIdExtractedLastValue++;
@@ -163,7 +195,7 @@
                 Swal.fire(xhr.responseJSON.message);
               }
             });
-          });           
+          });
       });
       </script>
 @endpush

@@ -18,4 +18,7 @@ Route::get('aside', function (){
 Route::prefix('admin')->name('admin.')->group(function(){
     Route::get('menu', [MenuController::class, 'index'])->name('getMenu');
     Route::get('menu/{menuItem}/menuItem', [MenuItemController::class, 'show'])->name('showMenuITems');
+    Route::post('menu/{menuItem}/menuItem', [MenuItemController::class, 'store'])->name('storeMenuItem');
+    Route::post('menu/menuItem/updateOrder', [MenuItemController::class, 'updateOrder'])->name('updateMenuItemOrder');
+    Route::post('mainMenu/updateOrder', [MenuController::class, 'updateOrder'])->name('updateMainMenuOrder');
 });

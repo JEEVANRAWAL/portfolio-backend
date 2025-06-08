@@ -14,7 +14,7 @@ class MenuController extends Controller
             return response()->view('admin.pages.menus.menu', ['error'=> 'data not found'], 404);
         }
         
-        return response()->view('admin.pages.menus.menu', compact('menus'), 200);
+        return response()->view('admin.menus.menu', compact('menus'), 200);
     }
 
     public function updateOrder(Request $request){
@@ -24,5 +24,9 @@ class MenuController extends Controller
             $menu->save();
         }
         return response()->json(['message'=> 'menu order updated sucessfully'], 200);
+    }
+
+    public function store(Request $request){
+        
     }
 }

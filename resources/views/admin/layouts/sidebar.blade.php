@@ -14,12 +14,12 @@
     </div>
     <div class="w-[90%] m-auto">
         <ul class="vertical-menu ">
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px]"><a href=""><i class="ti ti-home-2 text-[22px]"></i> <span class="item ml-2"> Dashboard</span></a></li>
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px]"><a href="menu"><i class="ti ti-menu-deep text-[22px]"></i> <span class="item ml-2"> Menus</span></a></li>
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] active"><a href=""><i class="ti ti-layout-dashboard text-[22px]"></i><span class="item ml-2"> Pages</span></a></li>
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px]"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> Blogs</span></a></li>
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px]"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> hello</span></a></li>
-            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px]"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> hello</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'dashboard' ? 'active' : ''}}"><a href=""><i class="ti ti-home-2 text-[22px]"></i> <span class="item ml-2"> Dashboard</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'menu' ? 'active' : ''}}"><a href="{{route('admin.Menu')}}"><i class="ti ti-menu-deep text-[22px]"></i> <span class="item ml-2"> Menus</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'page' ? 'active' : ''}}"><a href="#"><i class="ti ti-layout-dashboard text-[22px]"></i><span class="item ml-2"> Pages</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'blog' ? 'active' : ''}}"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> Blogs</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'post' ? 'active' : ''}}"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> hello</span></a></li>
+            <li class="hover:bg-red-100 px-4 py-2 mb-1 rounded-[8px] {{Request::segment(2) == 'post' ? 'active' : ''}}"><a href=""><i class="ti ti-article text-[22px]"></i> <span class="item ml-2"> hello</span></a></li>
         </ul>
     </div>
 

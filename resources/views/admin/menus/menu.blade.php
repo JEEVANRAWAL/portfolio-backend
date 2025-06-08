@@ -1,7 +1,14 @@
 @extends('admin.layouts.mainLayout')
 
 @section('content')
+
+<div class="w-[100%] border-[2px] border-gray-300 px-3 py-3 mb-5 rounded-[8px] flex">
+  <div class="w-[50%] flex items-center justify-center bg-blue-400 text-white rounded-[8px] gap-15"><span class="font-bold text-2xl">Menu Settings</span> <i class="fa-solid fa-screwdriver-wrench text-2xl"></i></div>
+  @include('admin.menus.popup-models.addMenuItem')
+</div>
+
 <div class="menu-page-wrapper w-full grid grid-cols-4 gap-5">
+
   @if($menus)
     <div id="menuBlock-1" class="mainMenuList w-[100%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
         <div class="mb-5">
@@ -13,6 +20,8 @@
           @endforeach
         </ul>
     </div>
+  @else
+    <span>No menu found</span>
   @endif
 
   {{-- <div class="w-[30%] border-[2px] border-gray-300 px-3 py-3 rounded-[8px]">
@@ -200,16 +209,8 @@
               },
               error: function(xhr, status, error) {  
                 $(document).find('.spinner-block').addClass('hidden');
-                Swal.fire({
-                  title: 'Data not found',
-                  text: xhr.responseJSON.message,
-                  icon: 'info',
-                  customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                  },
-                });
-
+                
+                toastr.error(xhr.responseJSON.message);
               }
             });
           });

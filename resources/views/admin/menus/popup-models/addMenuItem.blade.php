@@ -34,7 +34,7 @@
                 <!-- Main Menu Form -->
                 <div id="mainMenuForm" class="tab-content">
                     <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-[55px] mt-[55px]">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     Menu Name <span class="text-red-500">*</span>
@@ -42,6 +42,7 @@
                                 <input 
                                     type="text" 
                                     id="mainMenuName"
+                                    name="menu_name"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                     placeholder="Enter menu name"
                                     required
@@ -55,35 +56,13 @@
                                 <input 
                                     type="text" 
                                     id="mainMenuUrl"
+                                    name="url"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                     placeholder="/dashboard"
                                     required
                                 />
                             </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Icon Class
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="mainMenuIcon"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="fas fa-dashboard"
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Display Order
-                                </label>
-                                <input 
-                                    type="number" 
-                                    id="mainMenuOrder"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="1"
-                                />
-                            </div>
+
                         </div>
                         
                         <div>
@@ -92,6 +71,7 @@
                             </label>
                             <select 
                                 id="mainMenuStatus"
+                                name="status"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             >
                                 <option value="active">Active</option>
@@ -99,7 +79,7 @@
                             </select>
                         </div>
 
-                        <div class="flex justify-end gap-3 pt-4">
+                        <div class="flex justify-end gap-3 pt-4 mb-[55px]">
                             <button id="cancelMainBtn" class="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                                 Cancel
                             </button>
@@ -158,19 +138,7 @@
                                 </select>
                             </div>
                             
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Display Order
-                                </label>
-                                <input 
-                                    type="number" 
-                                    id="subMenuOrder"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="1"
-                                />
-                            </div>
-                            
-                            <div>
+                            <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     Status
                                 </label>
@@ -244,35 +212,30 @@
 
             // Form submission handlers
             $('#submitMainBtn').click(function() {
+                $(document).find('.spinner-block').removeClass('hidden');
                 if (validateMainMenuForm()) {
                     var formData = {
-                        name: $('#mainMenuName').val(),
+                        _token: "{{csrf_token()}}",
+                        menu_name: $('#mainMenuName').val(),
                         url: $('#mainMenuUrl').val(),
-                        icon: $('#mainMenuIcon').val(),
-                        order: $('#mainMenuOrder').val(),
                         status: $('#mainMenuStatus').val()
                     };
                     
-                    console.log('Main Menu Data:', formData);
-                    
-                    // Replace this with your AJAX call
-                    /*
                     $.ajax({
-                        url: '/api/menu/create',
+                        url: '/admin/menu',
                         method: 'POST',
                         data: formData,
                         success: function(response) {
-                            alert('Main menu added successfully!');
+                            toastr.success('Main menu added successfully!');
                             closeModal();
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
-                            alert('Error adding menu: ' + error);
+                            $(document).find('.spinner-block').addClass('hidden');
+                            toastr.error('Error adding menu: ' + xhr.responseJSON.message);
+                            closeModal();
                         }
                     });
-                    */
-                    
-                    alert('Main menu added successfully!');
-                    closeModal();
                 }
             });
 
@@ -357,9 +320,9 @@
 
             // Reset forms
             function resetForms() {
-                $('#mainMenuName, #mainMenuUrl, #mainMenuIcon, #mainMenuOrder').val('');
+                $('#mainMenuName, #mainMenuUrl').val('');
                 $('#mainMenuStatus').val('active');
-                $('#subMenuName, #subMenuUrl, #subMenuOrder').val('');
+                $('#subMenuName, #subMenuUrl').val('');
                 $('#subMenuParent').val('');
                 $('#subMenuStatus').val('active');
                 
@@ -373,11 +336,11 @@
             // Function to load parent menus dynamically
             function loadParentMenus() {
                 // Replace this with your AJAX call to fetch parent menus
-                /*
                 $.ajax({
-                    url: '/api/menu/list',
+                    url: 'admin/menu/list',
                     method: 'GET',
                     success: function(response) {
+                        console.log('Parent Menus:', response);
                         var select = $('#subMenuParent');
                         select.find('option:not(:first)').remove();
                         response.forEach(function(menu) {
@@ -385,7 +348,6 @@
                         });
                     }
                 });
-                */
             }
         });
     </script>

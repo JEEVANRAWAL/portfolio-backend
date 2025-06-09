@@ -27,6 +27,25 @@ class MenuController extends Controller
     }
 
     public function store(Request $request){
-        
+        if($request->ajax()){
+            $request->validate([
+                'menu_name' => 'required|string|unique:menus',
+                'url' => 'required|string',
+                'status' => 'required',
+            ]);
+            $data = $request->except(['_token']);
+            Menu::create($data);
+            return response()->json(['message'=> 'menu added successfully'], 200);
+        }
+
+        return view('admin.menus.menu');
+    }
+
+    public function menuList(){
+        $mainMenuList = Menu::where('status', 'active')->get();
+        $subMenuList = MenuItem::where('status', 'active')->get();
+
+        $finalMenuList = array_merge($mainMenuList, $subMenuList);
+        return response()->json($finalMenuList, 200);
     }
 }

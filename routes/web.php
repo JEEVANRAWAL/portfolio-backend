@@ -23,4 +23,5 @@ Route::prefix('admin')->name('admin.')->group(function(){
     Route::post('mainMenu/updateOrder', [MenuController::class, 'updateOrder'])->name('updateMainMenuOrder');
 
     Route::post('menu', [MenuController::class, 'store'])->name('store');
+    Route::get('menu/list', [MenuController::class, 'menuList'])->name('menulist');
 });

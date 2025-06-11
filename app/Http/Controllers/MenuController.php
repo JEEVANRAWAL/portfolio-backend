@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\MenuItem;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -45,7 +46,7 @@ class MenuController extends Controller
         $mainMenuList = Menu::where('status', 'active')->get();
         $subMenuList = MenuItem::where('status', 'active')->get();
 
-        $finalMenuList = array_merge($mainMenuList, $subMenuList);
+        $finalMenuList = array_merge($mainMenuList->toArray(), $subMenuList->toArray());
         return response()->json($finalMenuList, 200);
     }
 }

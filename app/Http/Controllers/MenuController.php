@@ -41,7 +41,7 @@ class MenuController extends Controller
         return view('admin.menus.menu');
     }
 
-    public function menuList(){
+    public function getMenuList(){
         $mainMenuList = Menu::where('status', 'active')->get();
         $subMenuList = MenuItem::where('status', 'active')->get();
 

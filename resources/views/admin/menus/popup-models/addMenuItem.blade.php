@@ -227,14 +227,15 @@
         $('#submitSubBtn').click(function() {
             if (validateSubMenuForm()) {
                 var formData = {
+                    _token: "{{ csrf_token() }}",
                     name: $('#subMenuName').val(),
                     url: $('#subMenuUrl').val(),
                     parentId: $('#subMenuParent').val(),
-                    order: $('#subMenuOrder').val(),
+                    parentMenuType: $('#subMenuParent').find(':selected').data('menutype'),
                     status: $('#subMenuStatus').val()
                 };
 
-                console.log('Sub Menu Data:', formData);
+                // console.log('Sub Menu Data:', formData);
 
                 // Replace this with your AJAX call
                 /*
@@ -331,7 +332,9 @@
                     var select = $('#subMenuParent');
                     select.find('option:not(:first)').remove();
                     response.forEach(function(menu) {
-                        select.append('<option value="' + menu.id + '">' + (menu
+                        select.append('<option value="' + menu.id + '" data-menuType="' + (
+                                menu.menu_name ? 'main' : 'sub') +
+                            '">' + (menu
                                 .menu_name ?? menu.title) +
                             '</option>');
                     });

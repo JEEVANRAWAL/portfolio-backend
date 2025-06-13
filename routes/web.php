@@ -21,7 +21,6 @@ Route::prefix('admin')->name('admin.')->group(function(){
     Route::post('menu/{menuItem}/menuItem', [MenuItemController::class, 'store'])->name('storeMenuItem');
     Route::post('menu/menuItem/updateOrder', [MenuItemController::class, 'updateOrder'])->name('updateMenuItemOrder');
     Route::post('mainMenu/updateOrder', [MenuController::class, 'updateOrder'])->name('updateMainMenuOrder');
-
     Route::post('menu', [MenuController::class, 'store'])->name('store');
     Route::get('menu/list', [MenuController::class, 'getMenuList'])->name('menulist');
     Route::post('submenu', [MenuItemController::class, 'store'])->name('store-submenu');

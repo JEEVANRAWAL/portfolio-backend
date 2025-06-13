@@ -37,4 +37,31 @@ class MenuItemController extends Controller
         }
         return response()->json(['message'=> 'menu order updated sucessfully'], 200);
     }
+
+    public function store(Request $request){
+        if($request->ajax()){
+            $request->validate([
+                'title' => 'required|string|unique:menu_items',
+                'url' => 'required',
+                'parentId' => 'required',
+                'parentMenuType' => 'required',
+                'status' => 'required'
+            ]);
+    
+            $subMenuData = [
+                'title' => $request->title,
+                'url' => $request->url,
+                'status' => $request->status
+            ];
+    
+            if($request->parentMenuType == 'main'){
+                $subMenuData['menu_id'] = $request->parentId;
+            } else{
+                $subMenuData['parent_menu_item_id'] = $request->parentId;
+            }
+            MenuItem::create($subMenuData);
+            return response()->json(['message'=>'sub menu added successfully'], 200);
+        }
+        return redirect()->back()->with(['message'=>'ajax call required']);
+    }
 }

@@ -228,33 +228,26 @@
             if (validateSubMenuForm()) {
                 var formData = {
                     _token: "{{ csrf_token() }}",
-                    name: $('#subMenuName').val(),
+                    title: $('#subMenuName').val(),
                     url: $('#subMenuUrl').val(),
                     parentId: $('#subMenuParent').val(),
                     parentMenuType: $('#subMenuParent').find(':selected').data('menutype'),
                     status: $('#subMenuStatus').val()
                 };
 
-                // console.log('Sub Menu Data:', formData);
-
-                // Replace this with your AJAX call
-                /*
                 $.ajax({
-                    url: '/api/submenu/create',
+                    url: '/admin/submenu',
                     method: 'POST',
                     data: formData,
                     success: function(response) {
-                        alert('Sub menu added successfully!');
+                        toastr.success(response.message);
                         closeModal();
                     },
                     error: function(xhr, status, error) {
-                        alert('Error adding sub menu: ' + error);
+                        toastr.error('Error adding sub menu: ' + error);
+                        closeModal();
                     }
                 });
-                */
-
-                alert('Sub menu added successfully!');
-                closeModal();
             }
         });
 

@@ -49,4 +49,11 @@ class MenuController extends Controller
         $finalMenuList = array_merge($mainMenuList->toArray(), $subMenuList->toArray());
         return response()->json($finalMenuList, 200);
     }
+
+    public function getAllMenu(){
+        $mainMenuList = Menu::all();
+        $subMenuList = MenuItem::all();
+        $finalMenuData = array_merge($mainMenuList->toArray(), $subMenuList->toArray());
+        return response()->json($finalMenuData, 200);
+    }
 }

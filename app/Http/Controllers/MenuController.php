@@ -54,6 +54,6 @@ class MenuController extends Controller
         $mainMenuList = Menu::all();
         $subMenuList = MenuItem::all();
         $finalMenuData = array_merge($mainMenuList->toArray(), $subMenuList->toArray());
-        return response()->json($finalMenuData, 200);
+        return view('admin.menus.menuSetting', compact('finalMenuData'));
     }
 }

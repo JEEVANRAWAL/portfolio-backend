@@ -1,10 +1,23 @@
 @extends('admin.layouts.mainLayout')
+@push('style')
+    <style>
+        .menuSetting {
+            transition: all 0.30s ease-in-out;
+        }
 
+        .menuSetting:hover {
+            cursor: pointer;
+            background-color: #155dfc;
+        }
+    </style>
+@endpush
 @section('content')
 
     <div class="w-[100%] border-[2px] border-gray-300 px-3 py-3 mb-5 rounded-[8px] flex">
-        <div class="w-[50%] flex items-center justify-center bg-blue-400 text-white rounded-[8px] gap-15"><span
-                class="font-bold text-2xl">Menu Settings</span> <i class="fa-solid fa-screwdriver-wrench text-2xl"></i></div>
+        <a href="{{ route('admin.getAllMenu') }}"
+            class="menuSetting w-[50%] flex items-center justify-center bg-blue-400 text-white rounded-[8px] gap-15">
+            <span class="font-bold text-2xl">Menu Settings</span> <i class="fa-solid fa-screwdriver-wrench text-2xl"></i>
+        </a>
         @include('admin.menus.popup-models.addMenuItem')
     </div>
 
@@ -145,52 +158,52 @@
                             // Initialize Sortable for the new submenu block
                             new Sortable(document.querySelector(
                                 `.${nextblockId}-sortable-list`), {
-                                    animation: 500,
-                                    ghostClass: 'sortable-ghost',
-                                    onEnd: function(evt) {
-                                        const items = document.querySelectorAll(
-                                            `.${nextblockId}-sortable-list .sortable-item`
-                                            );
-                                        const positions = Array.from(items).map((item,
-                                            index) => ({
-                                            name: item.textContent.trim(),
-                                            position: index + 1
-                                        }));
-                                        $(document).find('.spinner-block').removeClass(
-                                            'hidden');
+                                animation: 500,
+                                ghostClass: 'sortable-ghost',
+                                onEnd: function(evt) {
+                                    const items = document.querySelectorAll(
+                                        `.${nextblockId}-sortable-list .sortable-item`
+                                    );
+                                    const positions = Array.from(items).map((item,
+                                        index) => ({
+                                        name: item.textContent.trim(),
+                                        position: index + 1
+                                    }));
+                                    $(document).find('.spinner-block').removeClass(
+                                        'hidden');
 
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $(
-                                                    'meta[name="csrf-token"]'
-                                                    ).attr('content')
-                                            }
-                                        });
+                                    $.ajaxSetup({
+                                        headers: {
+                                            'X-CSRF-TOKEN': $(
+                                                'meta[name="csrf-token"]'
+                                            ).attr('content')
+                                        }
+                                    });
 
-                                        $.ajax({
-                                            url: "{{ route('admin.updateMenuItemOrder') }}",
-                                            method: 'POST',
-                                            data: {
-                                                _token: "{{ csrf_token() }}",
-                                                positions: positions
-                                            },
-                                            success: function(response) {
-                                                $(document).find(
-                                                        '.spinner-block')
-                                                    .addClass('hidden');
-                                                toastr.success(response
-                                                    .message);
-                                            },
-                                            error: function(xhr, status,
+                                    $.ajax({
+                                        url: "{{ route('admin.updateMenuItemOrder') }}",
+                                        method: 'POST',
+                                        data: {
+                                            _token: "{{ csrf_token() }}",
+                                            positions: positions
+                                        },
+                                        success: function(response) {
+                                            $(document).find(
+                                                    '.spinner-block')
+                                                .addClass('hidden');
+                                            toastr.success(response
+                                                .message);
+                                        },
+                                        error: function(xhr, status,
                                             error) {
-                                                $(document).find(
-                                                        '.spinner-block')
-                                                    .addClass('hidden');
-                                                toastr.error(error);
-                                            }
-                                        });
-                                    }
-                                });
+                                            $(document).find(
+                                                    '.spinner-block')
+                                                .addClass('hidden');
+                                            toastr.error(error);
+                                        }
+                                    });
+                                }
+                            });
                         } else {
                             $('.' + nextblockId + '-sortable-list').html(ulList);
 
@@ -202,7 +215,7 @@
                             do {
                                 grandparentIdExtractedLastValue++;
                                 nextSubmenu = $('#menuBlock-' +
-                                grandparentIdExtractedLastValue);
+                                    grandparentIdExtractedLastValue);
                                 if (nextSubmenu.length > 0) {
                                     nextSubmenu.remove();
                                 }

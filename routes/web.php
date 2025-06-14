@@ -24,5 +24,5 @@ Route::prefix('admin')->name('admin.')->group(function(){
     Route::post('menu', [MenuController::class, 'store'])->name('store');
     Route::get('menu/list', [MenuController::class, 'getMenuList'])->name('menulist');
     Route::post('submenu', [MenuItemController::class, 'store'])->name('store-submenu');
-    Route::get('menu/list/manage', [MenuController::class, 'getAllMenu'])->name('getAllMenu');
+    Route::get('menu/list/setting', [MenuController::class, 'getAllMenu'])->name('getAllMenu');
 });

@@ -9,7 +9,7 @@
     </div>
 
     <div class="w-[200px] text-gray-700 flex justify-between my-4 p-4 bg-blue-50 rounded-lg shadow-md"><a
-            href="{{ route('admin.Menu') }}"><span class="underline hover:text-blue-400">Menu</span></a><span
+            href="{{ route('admin.Menu ') }}"><span class="underline hover:text-blue-400">Menu</span></a><span
             class="font-bold">></span><span>Menu
             Settings</span>
     </div>
